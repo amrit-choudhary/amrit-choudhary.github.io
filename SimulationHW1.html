@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+
+    <h1>Coin Toss Experiment</h2>
+        <h3>Amrit Choudhary</h3>
+
+        No of tosses:
+        <br>
+        <input type="number" name="tossCount" value="5000" , id="tossCount">
+        <br> Reading Interval:
+        <br>
+        <input type="number" name="readingInterval" value="100" , id="readingInterval">
+        <br>
+        <br>
+        <button onclick="Calculate() ">Start</button>
+
+        <div id="curve_chart" style="width: 1200px; height: 600px"></div>
+
+        <p>
+            <table id="resultTable">
+                <tr>
+                    <th>Count</th>
+                    <th>Head Count</th>
+                    <th>Tail Count</th>
+                    <th>Head Prob</th>
+                    <th>Tail Prob</th>
+                </tr>
+            </table>
+
+        </p>
+
+        <style>
+            table {
+                font-family: arial, sans-serif;
+                border-collapse: collapse;
+                width: 40%;
+                border: 2px solid black;
+            }
+
+            td,
+            th {
+                border: 1px solid #dddddd;
+                text-align: left;
+                padding: 8px;
+            }
+
+            tr:nth-child(even) {
+                background-color: #dddddd;
+            }
+        </style>
+
+        <script>
+            function Calculate() {
+                var tossCount = document.getElementById("tossCount").value;
+                var readingInterval = document.getElementById("readingInterval").value;
+                var numberOfHeads = 0;
+                var intervalCounter = 0;
+
+                var elmtTable = document.getElementById("resultTable");
+                var rowCount = elmtTable.rows.length;
+
+                for (var x = rowCount - 1; x > 0; x--) {
+                    elmtTable.deleteRow(x);
+                }
+
+                var data = [
+                    ["Trials", "Heads Prob", "Tails Prob"]
+                ];
+
+                for (var i = 0; i < tossCount; i++) {
+                    var rand = Math.random();
+                    if (rand < 0.5) {
+                        numberOfHeads++;
+                    }
+
+                    var resultTable = document.getElementById("resultTable");
+
+                    if (intervalCounter >= readingInterval || i == 0) {
+                        var headProb = numberOfHeads / (i  + 1);
+                        if (i != 0)
+                            intervalCounter = 0;
+
+                        var resultTable = document.getElementById("resultTable");
+                        var row = resultTable.insertRow();
+                        row.insertCell().innerHTML = (i + 1);
+                        row.insertCell().innerHTML = numberOfHeads;
+                        row.insertCell().innerHTML = ((i + 1) - numberOfHeads);
+                        row.insertCell().innerHTML = headProb.toFixed(2);
+                        row.insertCell().innerHTML = (1 - headProb).toFixed(2);
+
+                        data.push([i, headProb, (1 - headProb)]);
+                    }
+
+                    intervalCounter++;
+                }
+
+                drawChart(data);
+            }
+
+        </script>
+
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+        <script type="text/javascript">
+            google.charts.load('current', { 'packages': ['corechart'] });
+            google.charts.setOnLoadCallback(drawChart);
+
+            function drawChart(dataExt) {
+                var data = google.visualization.arrayToDataTable(dataExt);
+
+                var options = {
+                    title: 'Probabilities',
+                    curveType: 'function',
+                    legend: { position: 'bottom' }
+                };
+
+                var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
+
+                chart.draw(data, options);
+            }
+        </script>
+
+</body>
+
+</html>
