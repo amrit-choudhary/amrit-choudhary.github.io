@@ -77,8 +77,10 @@
 
                     var resultTable = document.getElementById("resultTable");
 
+                    intervalCounter++;
+                    
                     if (intervalCounter >= readingInterval || i == 0) {
-                        var headProb = numberOfHeads / (i  + 1);
+                        var headProb = numberOfHeads / (i + 1);
                         if (i != 0)
                             intervalCounter = 0;
 
@@ -92,8 +94,6 @@
 
                         data.push([i, headProb, (1 - headProb)]);
                     }
-
-                    intervalCounter++;
                 }
 
                 drawChart(data);
