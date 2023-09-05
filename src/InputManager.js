@@ -2,7 +2,7 @@ class InputManager{
     sideThrusterLerp = 0.1
     rightThruster = 0.0
     leftThruster = 0.0
-
+    mainThrottleDelta = 0.0
 
     constructor(){
         addEventListener('keydown', ({key}) => this.readKeydown(key))
@@ -17,6 +17,12 @@ class InputManager{
             case 'ArrowLeft':
                 this.leftThruster = 1.0
                 break
+            case 'Shift':
+                this.mainThrottleDelta = 1.0
+                break
+            case 'Control':
+                this.mainThrottleDelta = -1.0
+                break
         }
     }
 
@@ -27,6 +33,12 @@ class InputManager{
                 break
             case 'ArrowLeft':
                 this.leftThruster = 0.0
+                break
+            case 'Shift':
+                this.mainThrottleDelta = 0.0
+                break
+            case 'Control':
+                this.mainThrottleDelta = 0.0
                 break
         }
     }
